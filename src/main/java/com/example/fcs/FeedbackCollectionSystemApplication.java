@@ -14,4 +14,4 @@ public class FeedbackCollectionSystemApplication {
 
 }
 
-//testing our new application
+//testing our new application, issue DEV-26
