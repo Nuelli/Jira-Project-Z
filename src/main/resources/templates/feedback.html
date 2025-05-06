@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Form</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<nav class="default-nav">
+    <ul>
+        <li><a href="/feedback">Feedback submission</a></li>
+        <li><a href="/list">Feedback list</a></li>
+        <li th:if="${isAdmin}"><a href="/analytics">Analytics</a></li>
+        <li th:unless="${isAdmin}"><a>Analytics (Only for Admins)</a></li>
+    </ul>
+</nav>
+<h1 th:if="${isAdmin}">Admins cannot submit feedback=(</h1>
+<div th:unless="${isAdmin}">
+<div th:if="${isUser}">
+    <h1>You can now submit a feedback of the service</h1>
+    <form method="post" action="/feedback/submit">
+        <input class="feedback-text" type="text" name="text" placeholder="Your feedback text" pattern="^.{1,299}$" required>
+        <br/>
+        <input type="hidden" name="rating" id="ratingInput" />
+        <span>Rate the service from 1 to 5:</span>
+        <div class="stars" id="starRating">
+            <span data-rating="1" onclick="setRating(1)"></span>
+            <span data-rating="2" onclick="setRating(2)"></span>
+            <span data-rating="3" onclick="setRating(3)"></span>
+            <span data-rating="4" onclick="setRating(4)"></span>
+            <span data-rating="5" onclick="setRating(5)"></span>
+        </div>
+        <br/>
+        <input type="hidden" name="convenience" id="convenienceInput" />
+        <span>Rate the convenience from 1 to 5:</span>
+        <div class="stars" id="convenienceRating">
+            <span data-rating="1" onclick="setConvenience(1)"></span>
+            <span data-rating="2" onclick="setConvenience(2)"></span>
+            <span data-rating="3" onclick="setConvenience(3)"></span>
+            <span data-rating="4" onclick="setConvenience(4)"></span>
+            <span data-rating="5" onclick="setConvenience(5)"></span>
+        </div>
+        <br/>
+        <label>Are you satisfied with the service?
+            <input type="checkbox" name="satisfied">
+        </label>
+        <br/>
+        <label>Anonymous feedback
+            <input type="checkbox" name="anonymous">
+        </label>
+        <br/>
+        <span class="subtitle">*Your feedback will not be shown for other users in feedback list, but admins will still see it for analytics</span>
+        <br/>
+        <button type="submit">Submit Feedback</button>
+        <br/>
+        <span th:class="${feedbackMessage.equals('Thank you for your feedback!') ? 'green' : 'red'}" th:text="${feedbackMessage}"/>
+    </form>
+</div>
+<div th:unless="${isUser}">
+    <h1>Enter your data to get started with submitting feedback</h1>
+    <form method="post" action="/get-started/submit">
+        <input type="text" name="username" placeholder="Username" pattern="^[a-zA-Z]{1,20}$" required>
+        <br/>
+        <input type="number" name="age" placeholder="Your age" min="12" max="120" required>
+        <br/>
+        <input type="text" name="country" placeholder="Your country of residence" pattern="^[a-zA-Z]{1,20}$" required>
+        <br/>
+        <button type="submit">Get Started</button>
+    </form>
+</div>
+</div>
+<script>
+    window.onload = function() {
+        document.getElementById('ratingInput').value = 0;
+        document.getElementById('convenienceInput').value = 0;
+    };
+    let userRating = 0;
+    function setRating(rating) {
+        userRating = rating;
+        document.getElementById('ratingInput').value = userRating;
+        updateStars();
+    }
+
+    function updateStars() {
+        const stars = document.getElementById('starRating').querySelectorAll('span');
+
+        stars.forEach((star, index) => {
+            star.classList.toggle('active', index < userRating);
+        });
+    }
+    let convenienceRating = 0;
+    function setConvenience(convenience) {
+        convenienceRating = convenience;
+        document.getElementById('convenienceInput').value = convenienceRating;
+        updateConvenience();
+    }
+
+    function updateConvenience() {
+        const convenience = document.getElementById('convenienceRating').querySelectorAll('span');
+
+        convenience.forEach((convenience, index) => {
+            convenience.classList.toggle('active', index < convenienceRating);
+        });
+    }
+</script>
+</body>
+</html>
