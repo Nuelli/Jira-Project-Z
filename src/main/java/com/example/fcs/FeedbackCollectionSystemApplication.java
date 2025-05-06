@@ -14,4 +14,5 @@ public class FeedbackCollectionSystemApplication {
 
 }
 
-//testing our new application, issue DEV-26
+//aws environment for production and staging is ready
+
