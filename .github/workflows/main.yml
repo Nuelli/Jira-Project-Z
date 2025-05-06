@@ -1,0 +1,62 @@
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+          clean: true
+
+      - name: Build Application
+        run: |
+          echo "Starting Build Process..."
+          sleep 2
+          echo "Build Completed Successfully!"
+
+      - name: Run Unit Tests
+        run: |
+          echo "Running Unit Tests..."
+          sleep 2
+          echo "All Tests Passed!"
+
+      - name: Generate Test Reports
+        run: |
+          echo "Generating Test Reports..."
+          sleep 1
+          echo "Test Reports Generated Successfully!"
+
+      - name: Publish Artifacts (Simulation)
+        run: |
+          echo "Publishing Artifacts..."
+          sleep 2
+          echo "Artifacts Published!"
+
+  deploy:
+    name: Deploy Application
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://your-deployment-url.com  # Optional URL
+    steps:
+      - name: Deploy to Production
+        run: |
+          echo "Deploying Application..."
+          sleep 3
+          echo "Deployment Successful!"
+
+      - name: Post-Deployment Verification
+        run: |
+          echo "Verifying Deployment..."
+          sleep 2
+          echo "Deployment Verified Successfully!"
