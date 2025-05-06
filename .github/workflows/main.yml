@@ -1,4 +1,4 @@
-name: CI-CD Pipeline
+name: Full CI/CD Pipeline
 
 on:
   push:
@@ -6,57 +6,115 @@ on:
       - main
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  checkout:
+    name: Checkout Code
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v3
         with:
           persist-credentials: true
           clean: true
 
-      - name: Build Application
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    needs: checkout
+    steps:
+      - name: Lint Source Code
         run: |
-          echo "Starting Build Process..."
-          sleep 2
-          echo "Build Completed Successfully!"
-
-      - name: Run Unit Tests
-        run: |
-          echo "Running Unit Tests..."
-          sleep 2
-          echo "All Tests Passed!"
-
-      - name: Generate Test Reports
-        run: |
-          echo "Generating Test Reports..."
+          echo "Linting code..."
           sleep 1
-          echo "Test Reports Generated Successfully!"
+          echo "No issues found!"
 
-      - name: Publish Artifacts (Simulation)
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Build Project
         run: |
-          echo "Publishing Artifacts..."
+          echo "Building the application..."
           sleep 2
-          echo "Artifacts Published!"
+          echo "Build successful!"
+
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Run Tests
+        run: |
+          echo "Running tests..."
+          sleep 2
+          echo "All tests passed!"
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Scan for Vulnerabilities
+        run: |
+          echo "Scanning for vulnerabilities..."
+          sleep 2
+          echo "No vulnerabilities found!"
+
+  generate-reports:
+    name: Generate Reports
+    runs-on: ubuntu-latest
+    needs: security-scan
+    steps:
+      - name: Generate Test Report
+        run: |
+          echo "Generating test report..."
+          sleep 1
+          echo "Report generated!"
+
+  package:
+    name: Package Artifact
+    runs-on: ubuntu-latest
+    needs: generate-reports
+    steps:
+      - name: Create Artifact
+        run: |
+          mkdir -p output
+          echo "Dummy build artifact" > output/build.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: output/
 
   deploy:
-    name: Deploy Application
-    needs: build-and-test
+    name: Deploy to Production
     runs-on: ubuntu-latest
+    needs: package
     environment:
       name: production
-      url: https://your-deployment-url.com  # Optional URL
+      url: https://relationalfs-team.atlassian.net/jira
     steps:
-      - name: Deploy to Production
-        run: |
-          echo "Deploying Application..."
-          sleep 3
-          echo "Deployment Successful!"
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: ./artifact/
 
-      - name: Post-Deployment Verification
+      - name: Deploy Application
         run: |
-          echo "Verifying Deployment..."
+          echo "Deploying application with artifact:"
+          cat ./artifact/build.txt
+          sleep 3
+          echo "Deployment successful!"
+
+  post-deploy-verify:
+    name: Post Deployment Verification
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Verify Deployment
+        run: |
+          echo "Verifying deployment..."
           sleep 2
-          echo "Deployment Verified Successfully!"
+          echo "Deployment verified successfully!"
