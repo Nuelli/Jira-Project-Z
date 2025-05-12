@@ -16,4 +16,5 @@ public class FeedbackCollectionSystemApplication {
 
 //aws environment for production and staging is ready
 //collection system is ready
+//status of open support tickets is readyt 
 
