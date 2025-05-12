@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for production Environment
+name: CI/CD Pipeline for PROD
 
 on:
   push:
