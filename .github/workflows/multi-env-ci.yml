@@ -1,4 +1,4 @@
-name: CI/CD for All Environments
+name: CI/CD for Other environments
 
 on:
   push:
