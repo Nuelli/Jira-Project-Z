@@ -79,7 +79,7 @@ jobs:
       - name: Create Artifact
         run: |
           mkdir -p output
-          echo "Dummy build artifact" > output/build.txt
+          echo "the artifact has been build successfully. END OF REPORT" > output/build.txt
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
