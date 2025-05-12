@@ -7,7 +7,6 @@ on:
       - staging
       - testing
       - uat
-      - main
 
 jobs:
   lint:
