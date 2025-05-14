@@ -6,4 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepository extends JpaRepository<Users, Integer>{
 }
 
-//schedule recurring payments
+//schedule recurring paymennts on monile
