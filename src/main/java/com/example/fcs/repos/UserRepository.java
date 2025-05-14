@@ -6,4 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepository extends JpaRepository<Users, Integer>{
 }
 
-//App crash nolonger a problem
+//App crash nolonger a problem.
