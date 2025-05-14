@@ -6,4 +6,3 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepository extends JpaRepository<Users, Integer>{
 }
 
-//schedule recurring paymennts on mobile version
