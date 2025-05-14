@@ -7,4 +7,4 @@ import com.example.fcs.entities.Users;
 public interface UserRepository extends JpaRepository<Users, Integer>{
 }
 
-//transaction history
+//frontend
