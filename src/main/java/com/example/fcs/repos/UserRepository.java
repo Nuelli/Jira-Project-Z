@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<Users, Integer>{
 }
-//password reset features added
-//OTP enabled, scheduled for testing
+
+//OTP working as expected
